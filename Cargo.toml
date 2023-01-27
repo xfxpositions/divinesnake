@@ -1,0 +1,13 @@
+[package]
+name = "divinesnake_rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+amethyst_core = "0.15.3"
+libmath = "0.2.1"
+macroquad = "0.3.25"
+rand = "0.8.5"
+
