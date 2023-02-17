@@ -45,8 +45,8 @@ async fn main() {
             let mut width = screen_width();
             let mut height = screen_height();
             let mut rng = thread_rng();
-            let mut pX:f32 = (rng.gen_range(0..gamearea.width as u32)/10) as f32;
-            let mut pY:f32 = (rng.gen_range(0..gamearea.height as u32)/10) as f32;
+            let mut pX:f32 = (rng.gen_range(gamearea.paddingX as u32..gamearea.width as u32)/10) as f32;
+            let mut pY:f32 = (rng.gen_range(gamearea.paddingY as u32..gamearea.height as u32)/10) as f32;
             pX.ceil();
             pY.ceil();
             pX*=10f32;
@@ -76,17 +76,19 @@ async fn main() {
     let mut snake:Snake = Snake{pX:300f32,pY:300f32,velocityX:1f32,velocityY:0f32,trails:&mut trails,trail_lenght:3 as usize};
     
     fn snake_move(snake:&mut Snake,apple:&mut Apple,gamearea:&Gamearea){
-        if(snake.pX == 0f32){
+        let width = gamearea.width + gamearea.paddingX;
+        let height = gamearea.height + gamearea.paddingY;
+        if(snake.pX == gamearea.paddingX){
             snake.pX = gamearea.width + gamearea.paddingX;
         }
-        else if(snake.pX == gamearea.width){
-            snake.pX = gamearea.paddingX + 1f32;
+        else if(snake.pX == gamearea.width - gamearea.paddingX){
+            snake.pX = gamearea.paddingX;
         }
-        else if(snake.pY == 0f32){
+        else if(snake.pY == gamearea.paddingY){
             snake.pY = gamearea.height + gamearea.paddingY;
         }
-        else if(snake.pY == gamearea.height){
-            snake.pY = gamearea.paddingY + 1f32 ;
+        else if(snake.pY == gamearea.height - gamearea.paddingY){
+            snake.pY = gamearea.paddingY;
         }
         //move head
         snake.pX += snake.velocityX*speed;
@@ -164,6 +166,7 @@ async fn main() {
         clear_background(BLACK);
         draw_gamearea(&mut gamearea);
         //println!("snake_px: {} snake_pY: {}", snake.pX,snake.pY);
+        draw_text((snake.trail_lenght - 3).to_string().as_str(), 150f32, gamearea.height + gamearea.paddingY + 3f32 + 50f32, 72f32, WHITE);
         snake_draw(&mut snake,part_size);
         draw_apple(&apple);
         println!("{},{}",snake.pX,snake.pY);
